@@ -7,6 +7,14 @@
 </head>
 <body>
     <h1>Recherche d'articles</h1>
+    <form method="POST" action="{{ url_for('recherche') }}">
+        <label for="terme_recherche">Terme de recherche:</label>
+        <input type="text" name="terme_recherche" required>
+        <button type="submit">Rechercher</button>
+    </form>
+    {% if terme_recherche %}
+        <h2>Résultats pour "{{ terme_recherche }}"</h2>
+    {% endif %}
     <ul>
         {% for article in articles %}
             <li>{{ article.designation }} - {{ article.prix_unitaire }}</li>
