@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suppression d'article par nom</title>
+</head>
+<body>
+    <h1>Suppression d'article par nom</h1>
+
+    <form method="POST" action="{{ url_for('suppression_par_nom') }}">
+        <label for="nom_a_supprimer">Nom à supprimer:</label>
+        <input type="text" name="nom_a_supprimer" required>
+        <button type="submit">Valider</button>
+    </form>
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    <a href="{{ url_for('index') }}">Retour à la page d'accueil</a>
+</body>
+</html>

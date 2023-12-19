@@ -1,5 +1,9 @@
 # ProjetNoSQL
-Installation :
+Requis:
+MongoDB Compass
+Redis
+
+Installation Module Python :
 pip install Flask pymongo redis
 
 Pour lancer le programme

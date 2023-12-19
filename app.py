@@ -58,14 +58,38 @@ def recherche():
 
     return render_template('recherche.html')
 
+# Nouvelle route pour la suppression par nom
+@app.route('/suppression_par_nom', methods=['GET', 'POST'])
+def suppression_par_nom():
+    if request.method == 'POST':
+        nom_a_supprimer = request.form['nom_a_supprimer']
+        
+        # Vérifiez si l'article avec le nom spécifié existe dans la base de données
+        article = collection.find_one({'designation': nom_a_supprimer})
+        
+        if article:
+            # Si l'article existe, supprimez-le de la base de données
+            collection.delete_one({'designation': nom_a_supprimer})
+            redis_client.flushall()
+            message = f"L'article '{nom_a_supprimer}' a été supprimé avec succès."
+        else:
+            # Si l'article n'existe pas, affichez un message approprié
+            message = f"L'article '{nom_a_supprimer}' n'existe pas."
+
+        return render_template('suppression_par_nom.html', message=message)
+
+    return render_template('suppression_par_nom.html')
+
+    
 # Fonction de conversion pour ObjectId
 def object_hook(dct):
     for key, value in dct.items():
         if isinstance(value, dict):
             dct[key] = object_hook(value)
-        elif key == "$oid":
-            return ObjectId(value)
+        elif key == "_id" and "$oid" in value:
+            dct[key] = ObjectId(value["$oid"])
     return dct
 
 if __name__ == '__main__':
     app.run(debug=True)
+
