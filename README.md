@@ -5,7 +5,7 @@ Redis
 
 # Installation Module Python
 Sur le terminal :
-pip install Flask pymongo redis
+pip install flask pymongo redis bson
 
 # Puis lancer le MongoDB et le serveur Redis
 Sur le terminal unbuntu :
