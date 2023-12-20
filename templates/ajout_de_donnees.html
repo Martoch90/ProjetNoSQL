@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajout de données depuis un fichier</title>
+</head>
+<body>
+    <h1>Ajout de données depuis un fichier</h1>
+
+    <li>Pour une bonne lecture du fichier il faut quelle soit en .txt</li>
+    <li>Le fichier doit être sous la forme : Désignation;prix_unitaire</li>
+    <li>Voici un exemple</li>
+    <br>
+    <em>Pomme;25.2</em><br>
+    <em>Poire;18</em><br>
+    <em>Orange;25.75</em><br>
+    <br>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <style>
+                        .message_color {
+                            color: rgb(0, 109, 128);
+                        }
+                    </style>
+                        <li class="message_color">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('ajout_de_donnees') }}" enctype="multipart/form-data">
+        <label for="file">Sélectionner un fichier texte (.txt) :</label>
+        <input type="file" name="file" accept=".txt" required>
+        <button type="submit">Ajouter les données</button>
+    </form>
+
+    <br>
+
+    <a href="{{ url_for('index') }}">Retour à l'accueil</a>
+</body>
+</html>

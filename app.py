@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from pymongo import MongoClient
 from flask import jsonify
 from flask import Flask, render_template, request, redirect, url_for, session
@@ -7,7 +7,9 @@ import redis
 import json
 from bson import json_util
 from bson import ObjectId
-import datetime
+import csv
+import io
+
 
 app = Flask(__name__)
 app.secret_key = 'tft_c_cool'  
@@ -31,6 +33,46 @@ def nouvel_article():
         return redirect(url_for('index'))
 
     return render_template('nouvel_article.html')
+
+@app.route('/ajout_de_donnees', methods=['GET', 'POST'])
+def ajout_de_donnees():
+    if request.method == 'POST':
+        # Vérifiez si un fichier a été téléchargé
+        if 'file' not in request.files:
+            flash('Aucun fichier n\'a été téléchargé.', 'error')
+            return redirect(request.url)
+
+        file = request.files['file']
+
+        # Vérifiez si le fichier a un nom
+        if file.filename == '':
+            flash('Aucun fichier sélectionné.', 'error')
+            return redirect(request.url)
+
+        # Vérifiez si le fichier est un fichier texte
+        if file and file.filename.endswith('.txt'):
+            try:
+                # Ouvrir le fichier en mode texte avec io.TextIOWrapper
+                text_file = io.TextIOWrapper(file, encoding='utf-8', newline='')
+                
+                # Lecture du fichier texte CSV en mode texte
+                csv_data = csv.reader(text_file, delimiter=';')
+
+                for row in csv_data:
+                    designation, prix_unitaire = row
+                    prix_unitaire = float(prix_unitaire)
+
+                    # Insérez les données dans la base de données
+                    collection.insert_one({'designation': designation, 'prix_unitaire': prix_unitaire})
+
+                flash('Les données ont été ajoutées avec succès.', 'success')
+            except Exception as e:
+                flash(f"Une erreur s'est produite lors de la lecture du fichier : {str(e)}", 'error')
+
+        else:
+            flash('Le fichier doit être au format texte (.txt).', 'error')
+
+    return render_template('ajout_de_donnees.html')
 
 @app.route('/recherche', methods=['GET', 'POST'])
 def recherche():
