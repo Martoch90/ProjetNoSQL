@@ -32,9 +32,7 @@ def nouvel_article():
 
         collection.insert_one({'designation': designation, 'prix_unitaire': prix_unitaire})
 
-        message = 'Ajoute : ' + designation + ' ' + str(prix_unitaire) + ' avec succès'
-    else:
-        message = 'Oups un soucis avec la requête. Vérifier le contenu du champs qui contient pas des caractères spéciaux'
+        message = 'Ajoute ' + designation + ' ' + str(prix_unitaire) + ' avec succès'
 
     return render_template('nouvel_article.html', message=message)
 
