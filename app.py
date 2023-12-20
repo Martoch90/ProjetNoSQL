@@ -10,8 +10,8 @@ from bson import ObjectId
 import csv
 import io
 
-
-app = Flask(__name__)
+#Connexion à la base de données
+app = Flask(__name__) 
 app.secret_key = 'tft_c_cool'  
 client = MongoClient('mongodb://localhost:27017/')
 db = client['gestion_stock']
