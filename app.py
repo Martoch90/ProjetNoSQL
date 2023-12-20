@@ -24,15 +24,19 @@ def index():
 
 @app.route('/nouvel_article', methods=['GET', 'POST'])
 def nouvel_article():
+    message = None  # Initialisez le message à None
+
     if request.method == 'POST':
         designation = request.form['designation']
         prix_unitaire = float(request.form['prix_unitaire'])
 
         collection.insert_one({'designation': designation, 'prix_unitaire': prix_unitaire})
 
-        return redirect(url_for('index'))
+        message = 'Ajoute : ' + designation + ' ' + str(prix_unitaire) + ' avec succès'
+    else:
+        message = 'Oups un soucis avec la requête. Vérifier le contenu du champs qui contient pas des caractères spéciaux'
 
-    return render_template('nouvel_article.html')
+    return render_template('nouvel_article.html', message=message)
 
 @app.route('/ajout_de_donnees', methods=['GET', 'POST'])
 def ajout_de_donnees():
